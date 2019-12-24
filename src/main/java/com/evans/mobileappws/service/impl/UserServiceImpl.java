@@ -4,6 +4,7 @@ import com.evans.mobileappws.dto.UserDto;
 import com.evans.mobileappws.entity.UserEntity;
 import com.evans.mobileappws.repository.UserRepository;
 import com.evans.mobileappws.service.UserService;
+import com.evans.mobileappws.shared.Utils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final Utils utils;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -24,7 +26,8 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDto, userEntity);
 
-        userEntity.setUserId("testUserId");
+        String publicUserId = utils.generateUserId(20);
+        userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword("test");
 
         UserEntity storedUser = userRepository.save(userEntity);
