@@ -7,6 +7,8 @@ import com.evans.mobileappws.service.UserService;
 import com.evans.mobileappws.shared.Utils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUserDetails = userRepository.findByEmail(userDto.getEmail());
 
-        if (storedUserDetails != null) throw new RuntimeException("Record already exists");
+        if (storedUserDetails != null) throw new RuntimeException("Email address already exists");
 
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDto, userEntity);
@@ -36,5 +38,10 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(storedUser, returnValue);
 
         return returnValue;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
     }
 }

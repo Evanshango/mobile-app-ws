@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api")
 @AllArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/user")
     public String getUser() {
         return "get user was called";
     }
