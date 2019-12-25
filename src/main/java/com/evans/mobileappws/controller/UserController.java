@@ -32,12 +32,12 @@ public class UserController {
         return userRest;
     }
 
-    @PutMapping
+    @PutMapping("/update-user")
     public String updateUser() {
         return "update user was called";
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete-user")
     public String deleteUser() {
         return "delete user was called";
     }
