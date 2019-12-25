@@ -1,7 +1,9 @@
 package com.evans.mobileappws.controller;
 
 import com.evans.mobileappws.dto.UserDto;
+import com.evans.mobileappws.exceptions.UserServiceException;
 import com.evans.mobileappws.model.request.UserDetails;
+import com.evans.mobileappws.model.response.ErrorMessages;
 import com.evans.mobileappws.model.response.UserRest;
 import com.evans.mobileappws.service.UserService;
 import lombok.AllArgsConstructor;
@@ -29,7 +31,6 @@ public class UserController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserRest createUser(@RequestBody UserDetails userDetails) {
         UserRest userRest = new UserRest();
-
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
 
@@ -39,11 +40,18 @@ public class UserController {
         return userRest;
     }
 
-    @PutMapping(path = "/update-user",
+    @PutMapping(path = "/update-user/{userId}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public String updateUser() {
-        return "update user was called";
+    public UserRest updateUser(@RequestBody UserDetails userDetails, @PathVariable String userId) {
+        UserRest returnValue = new UserRest();
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+
+        UserDto updatedUser = userService.updateUser(userId, userDto);
+        BeanUtils.copyProperties(updatedUser, returnValue);
+
+        return returnValue;
     }
 
     @DeleteMapping(path = "/delete-user",

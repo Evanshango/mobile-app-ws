@@ -2,6 +2,8 @@ package com.evans.mobileappws.service.impl;
 
 import com.evans.mobileappws.dto.UserDto;
 import com.evans.mobileappws.entity.UserEntity;
+import com.evans.mobileappws.exceptions.UserServiceException;
+import com.evans.mobileappws.model.response.ErrorMessages;
 import com.evans.mobileappws.repository.UserRepository;
 import com.evans.mobileappws.service.UserService;
 import com.evans.mobileappws.shared.Utils;
@@ -57,6 +59,20 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = userRepository.findByUserId(userId);
         if (entity == null) throw new UsernameNotFoundException("User not found");
         BeanUtils.copyProperties(entity, returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(String userId, UserDto userDto) {
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userEntity.setFirstName(userDto.getFirstName());
+        userEntity.setLastName(userDto.getLastName());
+
+        UserEntity updatedUser =  userRepository.save(userEntity);
+        BeanUtils.copyProperties(updatedUser, returnValue);
         return returnValue;
     }
 
