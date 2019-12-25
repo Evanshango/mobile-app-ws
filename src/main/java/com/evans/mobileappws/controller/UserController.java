@@ -1,9 +1,10 @@
 package com.evans.mobileappws.controller;
 
 import com.evans.mobileappws.dto.UserDto;
-import com.evans.mobileappws.exceptions.UserServiceException;
 import com.evans.mobileappws.model.request.UserDetails;
-import com.evans.mobileappws.model.response.ErrorMessages;
+import com.evans.mobileappws.model.response.RequestOperationName;
+import com.evans.mobileappws.model.response.OperationStatus;
+import com.evans.mobileappws.model.response.RequestOperationStatus;
 import com.evans.mobileappws.model.response.UserRest;
 import com.evans.mobileappws.service.UserService;
 import lombok.AllArgsConstructor;
@@ -54,9 +55,15 @@ public class UserController {
         return returnValue;
     }
 
-    @DeleteMapping(path = "/delete-user",
+    @DeleteMapping(path = "/delete-user/{userId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public String deleteUser() {
-        return "delete user was called";
+    public OperationStatus deleteUser(@PathVariable String userId) {
+        OperationStatus returnValue = new OperationStatus();
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+        userService.deleteUser(userId);
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return returnValue;
     }
 }
