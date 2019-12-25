@@ -16,7 +16,7 @@ public class Utils {
     private String generateRandomString(int length) {
         StringBuilder returnValue = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            String ALPHABET = "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
+            String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
         }
         return new String(returnValue);
