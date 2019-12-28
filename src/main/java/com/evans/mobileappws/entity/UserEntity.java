@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +15,7 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
     private static final long serialVersionUID = -4075853187560406392L;
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private long id;
 
     @Column(nullable = false)
@@ -39,4 +37,7 @@ public class UserEntity implements Serializable {
 
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
+
+    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
+    private List<AddressEntity> addresses;
 }

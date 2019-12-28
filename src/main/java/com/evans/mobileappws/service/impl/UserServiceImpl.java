@@ -1,5 +1,6 @@
 package com.evans.mobileappws.service.impl;
 
+import com.evans.mobileappws.dto.AddressDto;
 import com.evans.mobileappws.dto.UserDto;
 import com.evans.mobileappws.entity.UserEntity;
 import com.evans.mobileappws.exceptions.UserServiceException;
@@ -8,6 +9,7 @@ import com.evans.mobileappws.repository.UserRepository;
 import com.evans.mobileappws.service.UserService;
 import com.evans.mobileappws.shared.Utils;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,22 +32,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        UserEntity storedUserDetails = userRepository.findByEmail(userDto.getEmail());
 
-        if (storedUserDetails != null) throw new RuntimeException("Email address already exists");
+        if (userRepository.findByEmail(userDto.getEmail()) != null)
+            throw new RuntimeException("Email address already exists");
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDto, userEntity);
+        for (int i = 0; i < userDto.getAddresses().size(); i++) {
+            AddressDto addressDto = userDto.getAddresses().get(i);
+            addressDto.setUserDetails(userDto);
+            addressDto.setAddressId(utils.generateAddressId(30));
+            userDto.getAddresses().set(i, addressDto);
+        }
 
-        String publicUserId = utils.generateUserId(20);
+        ModelMapper mapper = new ModelMapper();
+        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+
+        String publicUserId = utils.generateUserId(30);
         userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
 
         UserEntity storedUser = userRepository.save(userEntity);
-        UserDto returnValue = new UserDto();
-        BeanUtils.copyProperties(storedUser, returnValue);
-
-        return returnValue;
+        return mapper.map(storedUser, UserDto.class);
     }
 
     @Override
