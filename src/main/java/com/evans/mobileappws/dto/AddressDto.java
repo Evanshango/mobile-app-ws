@@ -8,7 +8,6 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class AddressDto {
     private long id;
     private String addressId;
@@ -17,5 +16,6 @@ public class AddressDto {
     private String streetName;
     private String postalCode;
     private String type;
+    @ToString.Exclude
     private UserDto userDetails;
 }

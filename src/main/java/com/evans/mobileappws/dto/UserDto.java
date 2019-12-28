@@ -3,6 +3,7 @@ package com.evans.mobileappws.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,5 +22,6 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+    @ToString.Exclude
     private List<AddressDto> addresses;
 }

@@ -3,11 +3,12 @@ package com.evans.mobileappws.model.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressRest {
+@Data
+public class AddressRest extends RepresentationModel {
     private long id;
     private String addressId;
     private String city;
